@@ -1,7 +1,7 @@
 TOKEN_CONF = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
 ("reservada_si", automata_si),("reservada_entonces", automata_entonces), ("reservada_mostrar", automata_mostrar),("reservada_aceptar", automata_aceptar).
 ("identificadores", automata_id), ("parentesis", automata_parentesis), ("llaves", automata_llaves), ("simbolos", automata_simbolos)]
-qqqqqqqqqqqqqqqqqqqqqqq
+
 def automata_para(cadena):
 
     estado_actual = 0
