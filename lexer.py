@@ -1,4 +1,4 @@
-TOKENS = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
+TOKENS_A = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
 ("reservada_si", automata_si),("reservada_entonces", automata_entonces), ("reservada_mostrar", automata_mostrar),("reservada_aceptar", automata_aceptar).
 ("identificadores", automata_id), ("llaves", automata_llaves), ("simbolos", automata_simbolos),
 ("abrir_parentesis", automata_abrir_parentesis),("cerrar_parentesis", automata_cerrar_parentesis),
@@ -375,7 +375,7 @@ while puntero_posicion < len( string ) :
          tokens_posibles = tokens_posibles_mas_caracter
          tokens_posibles_mas_caracter = []
 
-         for( anyone_token, automata ) in TOKENS :
+         for( anyone_token, automata ) in TOKENS_A :
              insertar_cadena = afd(lexema) 
             if insertar_cadena == ESTADO_FINAL : 
                 tokens_posibles_mas_caracter.append( anyone_token )
