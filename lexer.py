@@ -354,6 +354,8 @@ if estado_actual == -1:
 else estado_actual in estados_finales:
     return ESTADO_FINAL
 
+_________________________________________________________________________________________________
+
 def lexer( string ) :
 
 tokens = []
