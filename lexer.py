@@ -354,8 +354,6 @@ if estado_actual == -1:
 else estado_actual in estados_finales:
     return ESTADO_FINAL
 
-#_________________________________________________________________________________________________
-
 def lexer( string ) :
 
 tokens = []
@@ -399,8 +397,6 @@ while puntero_posicion < len( string ) :
 
                     
                      
-                    
-hola mundo ! 
-aaaaaaaaaaaaaaaaa
+
 
 
