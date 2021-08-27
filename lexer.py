@@ -1,6 +1,8 @@
-TOKEN_CONF = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
+TOKENS = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
 ("reservada_si", automata_si),("reservada_entonces", automata_entonces), ("reservada_mostrar", automata_mostrar),("reservada_aceptar", automata_aceptar).
-("identificadores", automata_id), ("parentesis", automata_parentesis), ("llaves", automata_llaves), ("simbolos", automata_simbolos)]
+("identificadores", automata_id), ("llaves", automata_llaves), ("simbolos", automata_simbolos),
+("abrir_parentesis", automata_abrir_parentesis),("cerrar_parentesis", automata_cerrar_parentesis),
+("abrir_llaves", automata_abrir_llave),("cerrar_llaves", automata_cerrar_llave)]
 
 def automata_para(cadena):
 
@@ -230,6 +232,9 @@ def automata_aceptar(cadena):
             return ESTADO_FINAL
         else:
             return ESTADO_NO_FINAL
+
+
+
 def automata_id(cadena):
     letras = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 
@@ -237,6 +242,8 @@ def automata_id(cadena):
 
     estado_actual = 0
     estados_finales = [ 1 ]
+
+
 
         for caracter in cadena:
             if estado_actual == 0 and caracter in letras:
@@ -253,8 +260,10 @@ def automata_id(cadena):
             return ESTADO_FINAL
         else:
             return ESTADO_NO_FINAL
-def automata_parentesis(cadena):
-    simbolos = ["(",")"]
+
+
+def automata_abrir_parentesis(cadena):
+    simbolos = ["("]
 
     estado_actual = 0
     estados_finales = [1]
@@ -265,13 +274,54 @@ def automata_parentesis(cadena):
         else:
                 estado_actual = -1
                 break
-    if estado_actual == -1:
-        return ESTADO_TRAMPA
-    if estado_actual in estados_finales:
-        return ESTADO_FINAL
+                
+if estado_actual == -1:
+    return ESTADO_TRAMPA
 
-def automata_llaves(cadena):
-    simbolos = ["{","}"]
+else estado_actual in estados_finales:
+    return ESTADO_FINAL
+
+
+
+
+
+def automata_cerrar_parentesis(cadena):
+    simbolos = ["("]
+
+    estado_actual = 0
+    estados_finales = [1]
+
+    for caracter in cadena:
+        if estado_actual == 0 and caracter in simbolos:
+            estado_actual = 1
+        else:
+                estado_actual = -1
+                break
+                
+if estado_actual == -1:
+    return ESTADO_TRAMPA
+
+else estado_actual in estados_finales:
+    return ESTADO_FINAL  
+
+def automata_abrir_llave(cadena):
+    simbolos = ["{"]
+estado_actual = 0
+estados_finales = [1]
+
+for caracter in cadena:
+    if estado_actual == 0 and caracter in simbolos:
+        estado_actual = 1
+    else:
+            estado_actual = -1
+            break
+if estado_actual == -1:
+    return ESTADO_TRAMPA
+if estado_actual in estados_finales:
+    return ESTADO_FINAL
+
+def automata_cerrar_llave(cadena):
+    simbolos = ["}"]
 estado_actual = 0
 estados_finales = [1]
 
@@ -301,5 +351,54 @@ def automata_simbolos(cadena):
 
 if estado_actual == -1:
     return ESTADO_TRAMPA
-if estado_actual in estados_finales:
+else estado_actual in estados_finales:
     return ESTADO_FINAL
+
+def lexer( string ) :
+
+tokens = []
+puntero_posicion = 0 
+
+while puntero_posicion < len( string ) : 
+    while string[ puntero_posicion ].isspace() :
+        puntero_posicion = puntero_posicion + 1
+
+     inicio_lex = puntero_posicion   
+     tokens_posibles = []
+     tokens_posibles_mas_caracter = []
+     lexema = **
+     var_aux_todos_trampa = False
+
+     while not var_aux_todos_trampa :
+         var_aux_todos_trampa = True
+         lexema = string[inicio_lex : puntero_posicion + 1 ]
+         tokens_posibles = tokens_posibles_mas_caracter
+         tokens_posibles_mas_caracter = []
+
+         for( anyone_token, automata ) in TOKENS :
+             insertar_cadena = afd(lexema) 
+            if insertar_cadena == ESTADO_FINAL : 
+                tokens_posibles_mas_caracter.append( anyone_token )
+                var_aux_todos_trampa = False
+                elif insertar_cadena == ESTADO_NO_FINAL :
+                    var_aux_todos_trampa = False
+
+                    puntero_posicion = puntero_posicion + 1
+
+                    if len( tokens_posibles ) == 0  : 
+                        print( " ERROR : TOKEN DESCONOCIDO " + lexema )
+
+                    anyone_token = tokens_posibles(0)
+
+                    token = ( anyone_token, lexema )
+                    tokens.append( token )
+
+                    return tokens
+
+                    
+                     
+                    
+
+
+
+
