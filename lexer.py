@@ -1,4 +1,3 @@
-
 def automata_para(cadena):
 
     estado_actual = 0
@@ -278,11 +277,32 @@ def automata_abrir_parentesis(cadena):
             return ESTADO_NO_FINAL
 
 
+def automata_cte(cadena):
+    simbolos = ["1","2","3","4","5","6","7","8","9","0"]
 
+    estado_actual = 0
+    estados_finales = [1]
+
+    for caracter in cadena:
+        if estado_actual == 0 and caracter in simbolos:
+            estado_actual = 1
+        elif estado_actual == 1 and caracter in simbolos :
+             estado_actual = 1
+
+        else:
+                estado_actual = -1
+                break
+                
+        if estado_actual == -1:
+            return ESTADO_TRAMPA
+        if estado_actual in estados_finales:
+            return ESTADO_FINAL
+        else:
+            return ESTADO_NO_FINAL
 
 
 def automata_cerrar_parentesis(cadena):
-    simbolos = ["("]
+    simbolos = [")"]
 
     estado_actual = 0
     estados_finales = [1]
@@ -360,7 +380,7 @@ def automata_simbolos(cadena):
 
 TOKENS_A = [ ("reservada_para", automata_para),("reservada_desde", automata_desde),("reservada_hasta", automata_hasta),("reservada_sino", automata_sino),
 ("reservada_si", automata_si),("reservada_entonces", automata_entonces), ("reservada_mostrar", automata_mostrar),("reservada_aceptar", automata_aceptar).
-("identificadores", automata_id), ("llaves", automata_llaves), ("simbolos", automata_simbolos),
+("identificadores", automata_id), ("numeros", automata_cte), ("simbolos", automata_simbolos),
 ("abrir_parentesis", automata_abrir_parentesis),("cerrar_parentesis", automata_cerrar_parentesis),
 ("abrir_llaves", automata_abrir_llave),("cerrar_llaves", automata_cerrar_llave)]
 
@@ -371,6 +391,7 @@ def lexer( string ) :
 
 tokens = []
 puntero_posicion = 0 
+string= string + " " 
 
 while puntero_posicion < len( string ) : 
     while string[ puntero_posicion ].isspace() :
@@ -379,7 +400,7 @@ while puntero_posicion < len( string ) :
      inicio_lex = puntero_posicion   
      tokens_posibles = []
      tokens_posibles_mas_caracter = []
-     lexema = **
+     lexema = " "
      var_aux_todos_trampa = False
 
      while not var_aux_todos_trampa :
@@ -405,12 +426,10 @@ while puntero_posicion < len( string ) :
 
                     token = ( anyone_token, lexema )
                     tokens.append( token )
-     tokens.append(('EOF','EOF'))  
      
                     return tokens
 
-                    
-                     
+
 
 
 
