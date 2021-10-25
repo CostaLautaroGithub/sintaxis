@@ -22,6 +22,7 @@ def automata_para(cadena):
         else:
                 estado_actual = -1
                 break
+    
 
     if estado_actual == -1:
         return ESTADO_TRAMPA
@@ -240,12 +241,12 @@ def automata_id(cadena):
     letras = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     numeros = [ "0","1","2","3","4","5","6","7","8","9" ]
     estado_actual = 0
-    estados_finales = [1,2]
+    estados_finales = [1]
 
     for caracter in cadena:
         if estado_actual == 0 and caracter in letras:
            estado_actual = 1
-        elif estado_actual == 1 and ((caracter in letras) or (caracter in numeros)) :
+        elif estado_actual == 1 and caracter in letras or numeros :
             estado_actual = 1
         else:
             estado_actual == -1
@@ -395,7 +396,7 @@ def lexer(cadena):
     inicio_lex = 0
     tokens = []
     puntero_posicion = 0 
-    cadena = cadena + " "
+    cadena = cadena + " " # Con la sugerencia posterior, esto no sería necesario
 
     while puntero_posicion < len( cadena ) :
         inicio_lex = puntero_posicion
@@ -408,34 +409,48 @@ def lexer(cadena):
         lexema = " "
         var_aux_todos_trampa = False
 
-        if not var_aux_todos_trampa :
+        if not var_aux_todos_trampa : # Esto una sugerencia es usarlo con un while, si lo hacen de este modo 
+                                       # agregan en la condición "and puntero_posicion<len(cadena)+1":
+            # PARA CONTROLAR EL CORRECTO PROCESAMIENTO DEL ULTIMO CARACTER 
+            # COMO ANTES SE HACÍA CON EL ESPACIO, PERO SIN TENER QUE AGREGAR EL ESPACIO EXPLICÍTAMENTE Y CONTROLA 
+            # QUE NO SE VAYA DE RANGO ANTE UN ERROR EN EL INTERIOR DEL CICLO
                 var_aux_todos_trampa = True
                 lexema = cadena[inicio_lex : puntero_posicion]
                 tokens_posibles = tokens_posibles_mas_caracter   
                 tokens_posibles_mas_caracter = []
         print (lexema)
-        for( anyone_token, automata ) in TOKENS_A :
+        for( anyone_token, automata ) in TOKENS_A : # Si usan un while, esto estaria indentado dentro de ese while
         
                 insertar_cadena = automata(lexema) 
                 if insertar_cadena == ESTADO_FINAL : 
                         tokens_posibles.append( anyone_token )
                         var_aux_todos_trampa = False
                         break        
-                
+        
                 if insertar_cadena == ESTADO_NO_FINAL :
                         var_aux_todos_trampa = False
 
-        puntero_posicion = puntero_posicion + 1
+        puntero_posicion = puntero_posicion + 1  # Si usan un while, esto estaria indentado dentro de ese while
+                                                 # al nivel del for anterior
 
         if len( tokens_posibles ) == 0  : 
                 print( " ERROR : TOKEN DESCONOCIDO " + lexema )
 
+        #puntero_posicion  =puntero_posicion -1 
+        # ESTA LINEA SE AGREGA PORQUE CUANDO SE BUSCA EL TOKEN CON UN CARACTER MAS, 										# EL INDICE SE QUEDA EN CON UN CARACTER EXTRA, Y SI LOS TOKENS EN EL CODIGO 									# FUENTE NO ESTAN SEPARADOS POR UN ESPACIO, EL LEXER RECONOCE BIEN EL TOKEN 									# PERO GUARDA MAL EL LEXEMA PORQUE EL AGREGA UN CARACTER EXTRA QUE EN
+                        # REALIDAD CORRESPONDERÍA AL SIGUIENTE, QUE A SU VEZ COMIENZA CON UN 
+                        # CARACTER MENOS. ES DECIR ESTO ES NECESARIO POR SI TENGO ALGO COMO 344aux
+                        # QUE SON DOS TOKENS SEPARADOS SIN UN ESPACIO LO RECONOZCA COMO EL TOKEN 
+                        # "CTE" Y LEXEMA 344 SEGUIDO DEL TOKEN "ID" Y LEXEMA aux. SIN ESTO 
+                        # ERA NECESARIO EL ESPACIO "344 aux"
         anyone_token = tokens_posibles[0]
         token = ( anyone_token, lexema )
+        # Con lo cambios, esto pasaría a 
+        # token=(anyone_token, cadena[inicio_lex:puntero_posicion]) 
+        # POR EL MOTIVO ANTERIOR, 
+		# lexema CONTENÍA UN CARACTER DE MÁS, AHORA COMO A INDEX SE LE RESTÓ 1 GUARDA EL CORRECTO
         tokens.append( token )
 
     return tokens
 
-
-
-
+print(lexer("aux= ¿"))
